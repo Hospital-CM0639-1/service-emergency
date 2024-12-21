@@ -1,0 +1,21 @@
+version: '3.8'
+services:
+  service-emergency:
+    ports:
+      - 6061:6060
+    image: service-emergency-image
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - "TZ=Europe/Rome"
+    container_name: service-emergency
+    networks:
+      - net_storage
+    depends_on:
+      - hospital-database
+
+networks:
+  net_storage:
+    name: database_net_storage
+    external: true
