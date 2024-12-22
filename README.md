@@ -13,6 +13,7 @@ Then run the following command:
 ```
 docker compose up --build -t emergency-service -d
 ```
+The whole service will run at port 6001
 
 API Documentation
 ========
