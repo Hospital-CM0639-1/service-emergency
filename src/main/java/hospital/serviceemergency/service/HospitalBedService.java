@@ -36,13 +36,16 @@ public class HospitalBedService {
     }
 
     public DetailHospitalBedDto getHospitalBedByPatientId(Long patientId) {
-        return hospitalBedRepository.findByEmergencyVisit_Patient_Id(patientId).
-                map(this::convertToDetailedDto).orElse(null);
+        return hospitalBedRepository.findByEmergencyVisit_Patient_IdAndEmergencyVisitIsNotNull(patientId)
+                .map(this::convertToDetailedDto).orElseThrow(() -> {
+                    logger.error("Hospital Bed with patient id: {} not found", patientId);
+                    return new IllegalArgumentException("Hospital Bed with patient id: " + patientId + " not found");
+                });
     }
 
-    public HospitalBedDto getHospitalBedByBedNumber(String bedNumber) {
+    public DetailHospitalBedDto getHospitalBedByBedNumber(String bedNumber) {
         return hospitalBedRepository.findByBedNumber(bedNumber).
-                map(this::convertToDto).orElse(null);
+                map(this::convertToDetailedDto).orElse(null);
     }
 
     public List<HospitalBedDto> getHospitalBedsByCurrentStatusAndWardSection(ECurrentBedStatus currentStatus, String wardSection) {
