@@ -13,6 +13,128 @@ Then run the following command:
 ```
 docker compose up --build -t emergency-service -d
 ```
+The whole service will run at port 6061
 
 API Documentation
 ========
+HOSPITAL BED
+- Get all pageable hospitals beds<br/>
+  `GET /hospital-beds`
+- Get bed by id<br/>
+  `GET /hospital-beds/{id}`
+- Get bed by patient id<br/>
+  `GET /hospital-beds/patient/{patientId}`
+- Get bed by bed number<br/>
+  `GET /hospital-beds/bed-number/{bedNumber}`
+- Get bed by ward and current status<br/>
+  `GET /status/{currentStatus}/ward-section/{wardSection}`
+- Save a new bed<br/>
+  `POST /hospital-beds`
+- Update a bed<br/>
+  `PUT /hospital-beds/{id}`
+- Delete a bed<br/>
+`DELETE /hospital-beds/{id}`
+
+  _Example of object:_
+    ```json
+    {
+        "bedNumber": "O207",
+        "wardSection": "Orthopedic Ward",
+        "currentStatus": "AVAILABLE",
+        "lastCleanedTimestamp": "2024-12-21T17:04:11",
+        "emergencyVisit": {
+            "id": 2
+        }
+    }
+  ```
+EMERGENCY VISIT
+- Get all pageable emergency visits<br/>
+  `GET /emergency-visits`
+- Get all patient assigned to a staff<br/>
+  `GET /emergency-visits/doctor/{doctorId}`
+- Get all staff assigned to a patient<br/>
+  `GET /emergency-visits/patient/{patientId}`
+- Get staff and patient involed in an emergency visit<br/>
+  `GET /emergency-visits/doctor/visit/{visitId}`
+- Get all emergency visits between date<br/>
+  `GET /emergency-visits/dates?startDate/{yyyy-MM-dd HH:mm}&endDate/{yyyy-MM-dd HH:mm}`
+- Save a new emergency visit<br/>
+  `POST /emergency-visits`
+- Update an emergency visit<br/>
+  `PUT /emergency-visits/visit/{visitId}/staff/{staffId}`
+- Delete an emergency visit<br/>
+  `DELETE /emergency-visits/visit/{visitId}/staff/{staffId}`
+
+  _Example of object:_
+    ```json
+    {
+        "staffRole": "NURSE",
+        "visitId": 1,
+        "staffId": 3,
+        "assignedAt": "2024-12-21T16:19:11.920876"
+    }
+  ```
+PATIENT VITALS
+- Get all vitals of patient in a specific period of time.<br/>
+  `GET /patient-vitals/patient/{patientId}?startDate={yyyyy-MM-dd HH:mm}&endDate={yyyyy-MM-dd HH:mm}`
+- Get all patient vitals visited from staff in a specific period of time.<br/>
+  `GET /patient-vitals/staff/{doctorId}?startDate={yyyyy-MM-dd HH:mm}&endDate={yyyyy-MM-dd HH:mm}`
+- Get all patient vitals paged.<br/>
+  `GET /patient-vitals?page={page}&size={size}&sort={sort}`
+- Create a new patient vitals.<br/>
+  `POST /patient-vitals`
+- Update a patient vitals.<br/>
+  `PUT /patient-vitals/{id}`
+- Delete a patient vitals.<br/>
+  `DELETE /patient-vitals/{id}`
+  _Example of object:_
+  ```json
+  {
+    "id": 1,
+    "recordedAt": "2024-12-04T09:30:00",
+    "bodyTemperature": 38.2,
+    "bloodPressureSystolic": 130,
+    "bloodPressureDiastolic": 85,
+    "heartRate": 90,
+    "respiratoryRate": 20,
+    "oxygenSaturation": 96.5,
+    "additionalObservations": "Post-surgery monitoring, vitals stable",
+    "staff": {
+      "id": 1
+    },
+    "emergencyVisit": {
+      "id": 1
+    }
+  }
+  ```
+PATIENT INVOICE
+- Get all invoices<br/>
+  `GET /patient-invoices`
+- Get invoice by id<br/>
+- `GET /patient-invoices/{id}`
+- Get invoice by patient id<br/>
+  `GET /patient-invoices/patient/{patientId}`
+- Get invoice by visit id<br/>
+  `GET /patient-invoices/visit/{visitId}`
+- Save a new invoice<br/>
+  `POST /patient-invoices`
+- Update an invoice<br/>
+  `PUT /patient-invoices/{id}`
+- Delete an invoice<br/>
+  `DELETE /patient-invoices/{id}`
+  _Example of object:_
+  ```json
+  {
+    "totalAmount": 1500.0,
+    "paymentStatus": "pending",
+    "invoiceTimestamp": "2024-12-21T18:04:11.931438",
+    "paymentReceivedTimestamp": null,
+    "paymentReceivedAmount": 0.0,
+    "emergencyVisit": {
+        "id": 1
+    },
+    "createdByStaff": {
+        "id": 5
+    }
+  }
+  ```

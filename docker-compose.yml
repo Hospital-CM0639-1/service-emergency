@@ -2,7 +2,7 @@ version: '3.8'
 services:
   service-emergency:
     ports:
-      - 6061:6060
+      - 6061:6061
     image: service-emergency-image
     build:
       context: .
