@@ -2,6 +2,12 @@ Spring Boot Docker Service Emergency
 ==========================
 This service is a Spring Boot application that provides a RESTful API to handle beds, wards, assign patients to doctor, create patient invoce
 
+This service provides these functionalities:
+- Create, read, update, delete hospital beds
+- Create, read, update, delete emergency visits (Assign patients to doctors, nurses, etc)
+- Create, read, update, delete patient vitals
+- Create, read, update, delete patient invoices
+
 Docker
 ========
 Before to create the image and run the docker container, change the datasource of _application.properties_:
@@ -19,21 +25,21 @@ API Documentation
 ========
 HOSPITAL BED
 - Get all pageable hospitals beds<br/>
-  `GET /hospital-beds`
+  `GET /api/v1/hospital-beds`
 - Get bed by id<br/>
-  `GET /hospital-beds/{id}`
+  `GET /api/v1/hospital-beds/{id}`
 - Get bed by patient id<br/>
-  `GET /hospital-beds/patient/{patientId}`
+  `GET /api/v1/hospital-beds/patient/{patientId}`
 - Get bed by bed number<br/>
-  `GET /hospital-beds/bed-number/{bedNumber}`
+  `GET /api/v1/hospital-beds/bed-number/{bedNumber}`
 - Get bed by ward and current status<br/>
-  `GET /status/{currentStatus}/ward-section/{wardSection}`
+  `GET /api/v1/status/{currentStatus}/ward-section/{wardSection}`
 - Save a new bed<br/>
-  `POST /hospital-beds`
+  `POST /api/v1/hospital-beds`
 - Update a bed<br/>
-  `PUT /hospital-beds/{id}`
+  `PUT /api/v1/hospital-beds/{id}`
 - Delete a bed<br/>
-`DELETE /hospital-beds/{id}`
+`DELETE /api/v1/hospital-beds/{id}`
 
   _Example of object:_
     ```json
@@ -49,21 +55,21 @@ HOSPITAL BED
   ```
 EMERGENCY VISIT
 - Get all pageable emergency visits<br/>
-  `GET /emergency-visits`
+  `GET /api/v1/emergency-visits`
 - Get all patient assigned to a staff<br/>
-  `GET /emergency-visits/doctor/{doctorId}`
+  `GET /api/v1/emergency-visits/doctor/{doctorId}`
 - Get all staff assigned to a patient<br/>
-  `GET /emergency-visits/patient/{patientId}`
+  `GET /api/v1/emergency-visits/patient/{patientId}`
 - Get staff and patient involed in an emergency visit<br/>
-  `GET /emergency-visits/doctor/visit/{visitId}`
+  `GET /api/v1/emergency-visits/doctor/visit/{visitId}`
 - Get all emergency visits between date<br/>
-  `GET /emergency-visits/dates?startDate/{yyyy-MM-dd HH:mm}&endDate/{yyyy-MM-dd HH:mm}`
+  `GET /api/v1/emergency-visits/dates?startDate/{yyyy-MM-dd HH:mm}&endDate/{yyyy-MM-dd HH:mm}`
 - Save a new emergency visit<br/>
-  `POST /emergency-visits`
+  `POST /api/v1/emergency-visits`
 - Update an emergency visit<br/>
-  `PUT /emergency-visits/visit/{visitId}/staff/{staffId}`
+  `PUT /api/v1/emergency-visits/visit/{visitId}/staff/{staffId}`
 - Delete an emergency visit<br/>
-  `DELETE /emergency-visits/visit/{visitId}/staff/{staffId}`
+  `DELETE /api/v1/emergency-visits/visit/{visitId}/staff/{staffId}`
 
   _Example of object:_
     ```json
@@ -76,17 +82,17 @@ EMERGENCY VISIT
   ```
 PATIENT VITALS
 - Get all vitals of patient in a specific period of time.<br/>
-  `GET /patient-vitals/patient/{patientId}?startDate={yyyyy-MM-dd HH:mm}&endDate={yyyyy-MM-dd HH:mm}`
+  `GET /api/v1/patient-vitals/patient/{patientId}?startDate={yyyyy-MM-dd HH:mm}&endDate={yyyyy-MM-dd HH:mm}`
 - Get all patient vitals visited from staff in a specific period of time.<br/>
-  `GET /patient-vitals/staff/{doctorId}?startDate={yyyyy-MM-dd HH:mm}&endDate={yyyyy-MM-dd HH:mm}`
+  `GET /api/v1/patient-vitals/staff/{doctorId}?startDate={yyyyy-MM-dd HH:mm}&endDate={yyyyy-MM-dd HH:mm}`
 - Get all patient vitals paged.<br/>
-  `GET /patient-vitals?page={page}&size={size}&sort={sort}`
+  `GET /api/v1/patient-vitals?page={page}&size={size}&sort={sort}`
 - Create a new patient vitals.<br/>
-  `POST /patient-vitals`
+  `POST /api/v1/patient-vitals`
 - Update a patient vitals.<br/>
-  `PUT /patient-vitals/{id}`
+  `PUT /api/v1/patient-vitals/{id}`
 - Delete a patient vitals.<br/>
-  `DELETE /patient-vitals/{id}`
+  `DELETE /api/v1/patient-vitals/{id}`
   _Example of object:_
   ```json
   {
@@ -109,19 +115,19 @@ PATIENT VITALS
   ```
 PATIENT INVOICE
 - Get all invoices<br/>
-  `GET /patient-invoices`
+  `GET /api/v1/patient-invoices`
 - Get invoice by id<br/>
-- `GET /patient-invoices/{id}`
+- `GET /api/v1/patient-invoices/{id}`
 - Get invoice by patient id<br/>
-  `GET /patient-invoices/patient/{patientId}`
+  `GET /api/v1/patient-invoices/patient/{patientId}`
 - Get invoice by visit id<br/>
-  `GET /patient-invoices/visit/{visitId}`
+  `GET /api/v1/patient-invoices/visit/{visitId}`
 - Save a new invoice<br/>
-  `POST /patient-invoices`
+  `POST /api/v1/patient-invoices`
 - Update an invoice<br/>
-  `PUT /patient-invoices/{id}`
+  `PUT /api/v1/patient-invoices/{id}`
 - Delete an invoice<br/>
-  `DELETE /patient-invoices/{id}`
+  `DELETE /api/v1/patient-invoices/{id}`
   _Example of object:_
   ```json
   {

@@ -12,7 +12,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/patient-invoices")
+@RequestMapping("${vAPI}/patient-invoices")
 public class PatientInvoiceController {
 
     private final PatientInvoiceService patientInvoiceService;
