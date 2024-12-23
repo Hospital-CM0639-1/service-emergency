@@ -53,13 +53,13 @@ public class HospitalBedService {
                 stream().map(this::convertToDto).toList();
     }
 
-    public HospitalBedDto saveHospitalBed(HospitalBedDto hospitalBedDto) {
+    public DetailHospitalBedDto saveHospitalBed(HospitalBedDto hospitalBedDto) {
         HospitalBed hospitalBed = convertToEntity(hospitalBedDto);
         HospitalBed savedHospitalBed = hospitalBedRepository.save(hospitalBed);
-        return convertToDto(savedHospitalBed);
+        return convertToDetailedDto(savedHospitalBed);
     }
 
-    public HospitalBedDto updateHospitalBed(HospitalBedDto hospitalBedDto, Long id) {
+    public DetailHospitalBedDto updateHospitalBed(HospitalBedDto hospitalBedDto, Long id) {
         boolean existsById = hospitalBedRepository.existsById(id);
         if (!existsById) {
             logger.error("Hospital Bed with id: {} not found", id);
@@ -68,7 +68,7 @@ public class HospitalBedService {
         HospitalBed hospitalBed = convertToEntity(hospitalBedDto);
         hospitalBed.setId(id);
         HospitalBed savedHospitalBed = hospitalBedRepository.save(hospitalBed);
-        return convertToDto(savedHospitalBed);
+        return convertToDetailedDto(savedHospitalBed);
     }
 
     public void deleteHospitalBed(Long id) {

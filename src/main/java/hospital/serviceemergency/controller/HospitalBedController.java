@@ -75,11 +75,10 @@ public class HospitalBedController {
     /**
      * Save hospital bed
      * @param hospitalBedDto
-     * @return HospitalBedDto
+     * @return DetailHospitalBedDto
      */
-    // TODO - review the DTO
     @PostMapping(produces = "application/json")
-    public ResponseEntity<HospitalBedDto> saveHospitalBed(@RequestBody HospitalBedDto hospitalBedDto) {
+    public ResponseEntity<DetailHospitalBedDto> saveHospitalBed(@RequestBody DetailHospitalBedDto hospitalBedDto) {
         return ResponseEntity.ok(this.hospitalBedService.saveHospitalBed(hospitalBedDto));
     }
 
@@ -87,11 +86,10 @@ public class HospitalBedController {
      * Update hospital bed
      * @param hospitalBedDto
      * @param id
-     * @return HospitalBedDto
+     * @return DetailHospitalBedDto
      */
-    // TODO - review the DTO
     @PutMapping(produces = "application/json", value = "/{id}")
-    public ResponseEntity<HospitalBedDto> updateHospitalBed(@RequestBody HospitalBedDto hospitalBedDto,
+    public ResponseEntity<DetailHospitalBedDto> updateHospitalBed(@RequestBody DetailHospitalBedDto hospitalBedDto,
                                                             @PathVariable Long id) {
         return ResponseEntity.ok(this.hospitalBedService.updateHospitalBed(hospitalBedDto, id));
     }

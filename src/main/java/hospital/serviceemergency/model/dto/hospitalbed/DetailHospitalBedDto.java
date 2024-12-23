@@ -12,7 +12,7 @@ public class DetailHospitalBedDto extends HospitalBedDto {
 @Getter
 @Setter
 class EmergencyVisitDto {
-    private String triageNotes;
+    private Long id;
     private PatientDto patient;
 }
 
@@ -20,10 +20,5 @@ class EmergencyVisitDto {
 @Setter
 class PatientDto {
     private Long id;
-    private String firstName;
-    private String lastName;
-    private String dateOfBirth;
-    private String emergencyContactName;
-    private String emergencyContactNumber;
 }
 

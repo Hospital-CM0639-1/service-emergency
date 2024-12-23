@@ -17,3 +17,33 @@ The whole service will run at port 6001
 
 API Documentation
 ========
+HOSPITAL BED
+- Get all pageable hospitals beds<br/>
+  `GET /hospital-beds`
+- Get bed by id<br/>
+  `GET /hospital-beds/{id}`
+- Get bed by patient id<br/>
+  `GET /hospital-beds/patient/{patientId}`
+- Get bed by bed number<br/>
+  `GET /hospital-beds/bed-number/{bedNumber}`
+- Get bed by ward and current status<br/>
+  `GET /status/{currentStatus}/ward-section/{wardSection}`
+- Save a new bed<br/>
+  `POST /hospital-beds`
+- Update a bed<br/>
+  `PUT /hospital-beds/{id}`
+- Delete a bed<br/>
+`DELETE /hospital-beds/{id}`
+
+  _Example of object:_
+    ```json
+    {
+        "bedNumber": "O207",
+        "wardSection": "Orthopedic Ward",
+        "currentStatus": "AVAILABLE",
+        "lastCleanedTimestamp": "2024-12-21T17:04:11",
+        "emergencyVisit": {
+            "id": 2
+        }
+    }
+  ```
