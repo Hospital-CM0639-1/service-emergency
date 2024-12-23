@@ -41,7 +41,7 @@ public class PatientVitalController {
      * @return List<PatientVitalDto>
      */
     @GetMapping(produces = "application/json", value = "staff/{staffId}")
-    public ResponseEntity<List<DetailPatientVitalDto>> getAllDoctorPatientVitals(
+    public ResponseEntity<List<DetailPatientVitalDto>> getAllStaffPatientVitals(
             @PathVariable Long staffId,
             @RequestParam(value = "startDate", required = false) @DateTimeFormat(pattern="yyyy-MM-dd HH:mm") LocalDateTime startDate,
             @RequestParam(value = "finishDate", required = false) @DateTimeFormat(pattern="yyyy-MM-dd HH:mm")  LocalDateTime finishDate) {

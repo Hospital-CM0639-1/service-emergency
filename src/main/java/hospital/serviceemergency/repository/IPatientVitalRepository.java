@@ -1,7 +1,6 @@
 package hospital.serviceemergency.repository;
 
 import hospital.serviceemergency.model.PatientVital;
-import hospital.serviceemergency.model.enums.EStaffRole;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,5 +14,6 @@ public interface IPatientVitalRepository extends JpaRepository<PatientVital, Lon
     List<PatientVital> findAllByStaff_IdAndRecordedAtBetween(Long id, LocalDateTime startDate, LocalDateTime finishDate);
 
     List<PatientVital> findAllByEmergencyVisit_Patient_IdAndRecordedAtBetween(Long patientId, LocalDateTime startDate, LocalDateTime finishDate);
+
 
 }

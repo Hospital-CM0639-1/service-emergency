@@ -8,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/patient-invoices")
@@ -37,6 +39,26 @@ public class PatientInvoiceController {
     @GetMapping(produces = "application/json", value = "{id}")
     public ResponseEntity<PatientInvoiceDto> getPatientInvoiceById(@PathVariable Long id) {
         return ResponseEntity.ok(this.patientInvoiceService.getPatientInvoiceById(id));
+    }
+
+    /**
+     * Get patient invoice by patient id
+     * @param patientId
+     * @return List<PatientInvoiceDto>
+     */
+    @GetMapping(produces = "application/json", value = "/patient/{patientId}")
+    public ResponseEntity<List<PatientInvoiceDto>> getInvoiceByPatientId(@PathVariable Long patientId) {
+        return ResponseEntity.ok(this.patientInvoiceService.getInvoiceByPatientId(patientId));
+    }
+
+    /**
+     * Get patient invoice by visit id
+     * @param visitId
+     * @return List<PatientInvoiceDto>
+     */
+    @GetMapping(produces = "application/json", value = "/visit/{visitId}")
+    public ResponseEntity<List<PatientInvoiceDto>> getInvoiceByVisitId(@PathVariable Long visitId) {
+        return ResponseEntity.ok(this.patientInvoiceService.getInvoiceByVisitId(visitId));
     }
 
     /**

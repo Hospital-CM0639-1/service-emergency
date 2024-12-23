@@ -50,6 +50,18 @@ public class PatientInvoiceService {
         return convertToDto(patientInvoce);
     }
 
+    // Get invoice by patient id
+    public List<PatientInvoiceDto> getInvoiceByPatientId(Long patientId) {
+        List<PatientInvoce> patientInvoce = patientInvoiceRepository.findByEmergencyVisit_Patient_Id(patientId);
+        return patientInvoce.stream().map(this::convertToDto).collect(Collectors.toList());
+    }
+
+    // Get invoice by visit id
+    public List<PatientInvoiceDto> getInvoiceByVisitId(Long visitId) {
+        List<PatientInvoce> patientInvoce = patientInvoiceRepository.findByEmergencyVisit_Id(visitId);
+        return patientInvoce.stream().map(this::convertToDto).collect(Collectors.toList());
+    }
+
 
     /**
      * Save patient invoice
