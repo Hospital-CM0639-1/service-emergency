@@ -57,5 +57,8 @@ public class Staff {
     @OneToMany(mappedBy = "staff", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PatientVital> patientVitals = new ArrayList<>();
 
+    @OneToMany(mappedBy = "createdByStaff", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PatientInvoce> patientInvoices = new ArrayList<>();
+
 
 }

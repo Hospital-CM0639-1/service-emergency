@@ -49,4 +49,7 @@ public class EmergencyVisit {
     @OneToMany(mappedBy = "emergencyVisit")
     List<HospitalBed> hospitalBeds;
 
+    @OneToMany(mappedBy = "emergencyVisit")
+    List<PatientInvoce> patientInvoices;
+
 }
