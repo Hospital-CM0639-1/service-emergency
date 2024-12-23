@@ -47,3 +47,30 @@ HOSPITAL BED
         }
     }
   ```
+EMERGENCY VISIT
+- Get all pageable emergency visits<br/>
+  `GET /emergency-visits`
+- Get all patient assigned to a staff<br/>
+  `GET /emergency-visits/doctor/{doctorId}`
+- Get all staff assigned to a patient<br/>
+  `GET /emergency-visits/patient/{patientId}`
+- Get staff and patient involed in an emergency visit<br/>
+  `GET /emergency-visits/doctor/visit/{visitId}`
+- Get all emergency visits between date<br/>
+  `GET /emergency-visits/dates?startDate/{yyyy-MM-dd HH:mm}&endDate/{yyyy-MM-dd HH:mm}`
+- Save a new emergency visit<br/>
+  `POST /emergency-visits`
+- Update an emergency visit<br/>
+  `PUT /emergency-visits/visit/{visitId}/staff/{staffId}`
+- Delete an emergency visit<br/>
+  `DELETE /emergency-visits/visit/{visitId}/staff/{staffId}`
+
+  _Example of object:_
+    ```json
+    {
+        "staffRole": "NURSE",
+        "visitId": 1,
+        "staffId": 3,
+        "assignedAt": "2024-12-21T16:19:11.920876"
+    }
+  ```

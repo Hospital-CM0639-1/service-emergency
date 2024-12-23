@@ -2,12 +2,13 @@ package hospital.serviceemergency.controller;
 
 import hospital.serviceemergency.model.dto.emergencyvisitstaff.EmergencyVisitStaffDto;
 import hospital.serviceemergency.service.EmergencyVisitStaffService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -17,6 +18,16 @@ public class EmergencyVisitStaffController {
 
     public EmergencyVisitStaffController(EmergencyVisitStaffService emergencyVisitStaffService) {
         this.emergencyVisitStaffService = emergencyVisitStaffService;
+    }
+
+    /**
+     * Get all pageable emergency visit staff
+     * @param pageable
+     * @return Page of emergency visit staff
+     */
+    @GetMapping(produces = "application/json")
+    public ResponseEntity<Page<EmergencyVisitStaffDto>> getAllEmergencyVisitStaff(Pageable pageable) {
+        return ResponseEntity.ok(this.emergencyVisitStaffService.getAllEmergencyVisitStaff(pageable));
     }
 
     /**
@@ -47,5 +58,53 @@ public class EmergencyVisitStaffController {
     @GetMapping(value = "visit/{visitId}", produces = "application/json")
     public ResponseEntity<List<EmergencyVisitStaffDto>> getPatientAndStaffInvolvedInVisit(@PathVariable Long visitId) {
         return ResponseEntity.ok(this.emergencyVisitStaffService.getPatientAndStaffInvolvedInVisit(visitId));
+    }
+
+    /**
+     * Get all emergency visits between dates
+     * @param startDate
+     * @param endDate
+     * @return List of emergency visits between dates
+     */
+    @GetMapping(value = "dates", produces = "application/json")
+    public ResponseEntity<List<EmergencyVisitStaffDto>> getEmergencyVisitStaffBetweenDates(
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") LocalDateTime startDate,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") LocalDateTime endDate) {
+        return ResponseEntity.ok(this.emergencyVisitStaffService.getEmergencyVisitStaffBetweenDates(startDate, endDate));
+    }
+
+    /**
+     * Add emergency visit staff
+     * @param emergencyVisitStaffDto
+     * @return EmergencyVisitStaffDto
+     */
+    @PostMapping(consumes = "application/json", produces = "application/json")
+    public ResponseEntity<EmergencyVisitStaffDto> addEmergencyVisitStaff(@RequestBody EmergencyVisitStaffDto emergencyVisitStaffDto) {
+        return ResponseEntity.ok(this.emergencyVisitStaffService.addEmergencyVisitStaff(emergencyVisitStaffDto));
+    }
+
+    /**
+     * Update emergency visit staff
+     * @param emergencyVisitStaffDto
+     * @param visitId
+     * @param staffId
+     * @return EmergencyVisitStaffDto
+     */
+    @PutMapping(value = "visit/{visitId}/staff/{staffId}", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<EmergencyVisitStaffDto> updateEmergencyVisitStaff(
+            @RequestBody EmergencyVisitStaffDto emergencyVisitStaffDto,
+            @PathVariable Long visitId,
+            @PathVariable Long staffId) {
+        return ResponseEntity.ok(this.emergencyVisitStaffService.updateEmergencyVisitStaff(emergencyVisitStaffDto, visitId, staffId));
+    }
+
+    /**
+     * Delete emergency visit staff
+     * @param visitId
+     * @param staffId
+     */
+    @DeleteMapping(value = "visit/{visitId}/staff/{staffId}")
+    public void deleteEmergencyVisitStaff(@PathVariable Long visitId, @PathVariable Long staffId) {
+        this.emergencyVisitStaffService.deleteEmergencyVisitStaff(visitId, staffId);
     }
 }
