@@ -17,6 +17,7 @@ public class EmergencyVisitStaffDto {
     private Long staffId;
     private LocalDateTime assignedAt;
     private EmergencyVisitDto emergencyVisit;
+    private StaffDto staff;
 
 }
 
@@ -24,6 +25,7 @@ public class EmergencyVisitStaffDto {
 @Setter
 class EmergencyVisitDto {
     private Long id;
+    private String priorityLevel;
     private PatientDto patient;
 }
 
@@ -31,4 +33,14 @@ class EmergencyVisitDto {
 @Setter
 class PatientDto {
     private Long id;
+    private String firstName;
+    private String lastName;
+}
+
+@Getter
+@Setter
+class StaffDto {
+    private Long id;
+    private String firstName;
+    private String lastName;
 }

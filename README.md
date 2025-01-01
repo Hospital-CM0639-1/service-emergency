@@ -27,11 +27,25 @@ HOSPITAL BED
 - Get bed by bed number<br/>
   `GET /hospital-beds/bed-number/{bedNumber}`
 - Get bed by ward and current status<br/>
-  `GET /status/{currentStatus}/ward-section/{wardSection}`
-- Save a new bed<br/>
-  `POST /hospital-beds`
+  `GET /api/v1/status/{currentStatus}/ward-section/{wardSection}`
+- Save a new bed and assign<br/>
+  `POST /api/v1/hospital-beds`
+<br/>Example:
+  ```json
+  {
+    "bedNumber": "C102",
+    "wardSection": "Cardiac Ward",
+    "currentStatus": "AVAILABLE",
+    "lastCleanedTimestamp": "2024-12-21T16:04:11.929244",
+    "emergencyVisit": { // can be empty
+      "id": 1
+    }
+  }
+  ```
 - Update a bed<br/>
-  `PUT /hospital-beds/{id}`
+  `PUT /api/v1/hospital-beds/{id}`
+- Assign a patient to a bed<br/>
+  `PUT /api/v1/hospital-beds/assign-patient/{id}/hospital-bed/{id}`
 - Delete a bed<br/>
 `DELETE /hospital-beds/{id}`
 
@@ -49,21 +63,21 @@ HOSPITAL BED
   ```
 EMERGENCY VISIT
 - Get all pageable emergency visits<br/>
-  `GET /emergency-visits`
+  `GET /api/v1/emergency-visit-staff`
 - Get all patient assigned to a staff<br/>
-  `GET /emergency-visits/doctor/{doctorId}`
+  `GET /api/v1/emergency-visit-staff/doctor/{doctorId}`
 - Get all staff assigned to a patient<br/>
-  `GET /emergency-visits/patient/{patientId}`
+  `GET /api/v1/emergency-visit-staff/patient/{patientId}`
 - Get staff and patient involed in an emergency visit<br/>
-  `GET /emergency-visits/doctor/visit/{visitId}`
+  `GET /api/v1/emergency-visit-staff/visit/{visitId}`
 - Get all emergency visits between date<br/>
-  `GET /emergency-visits/dates?startDate/{yyyy-MM-dd HH:mm}&endDate/{yyyy-MM-dd HH:mm}`
+  `GET /api/v1/emergency-visit-staff/dates?startDate/{yyyy-MM-dd HH:mm}&endDate/{yyyy-MM-dd HH:mm}`
 - Save a new emergency visit<br/>
-  `POST /emergency-visits`
+  `POST /api/v1/emergency-visit-staff`
 - Update an emergency visit<br/>
-  `PUT /emergency-visits/visit/{visitId}/staff/{staffId}`
+  `PUT /api/v1/emergency-visit-staff/visit/{visitId}/staff/{staffId}`
 - Delete an emergency visit<br/>
-  `DELETE /emergency-visits/visit/{visitId}/staff/{staffId}`
+  `DELETE /api/v1/emergency-visit-staff/visit/{visitId}/staff/{staffId}`
 
   _Example of object:_
     ```json
@@ -122,7 +136,7 @@ PATIENT INVOICE
   `PUT /patient-invoices/{id}`
 - Delete an invoice<br/>
   `DELETE /patient-invoices/{id}`
-  _Example of object:_
+ <br/> _Example of object:_
   ```json
   {
     "totalAmount": 1500.0,
