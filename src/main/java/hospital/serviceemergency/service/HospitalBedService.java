@@ -1,8 +1,10 @@
 package hospital.serviceemergency.service;
+import hospital.serviceemergency.model.EmergencyVisit;
 import hospital.serviceemergency.model.HospitalBed;
 import hospital.serviceemergency.model.dto.hospitalbed.DetailHospitalBedDto;
 import hospital.serviceemergency.model.dto.hospitalbed.HospitalBedDto;
 import hospital.serviceemergency.model.enums.ECurrentBedStatus;
+import hospital.serviceemergency.repository.IEmergencyVisitRepository;
 import hospital.serviceemergency.repository.IHospitalBedRepository;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -18,10 +20,14 @@ public class HospitalBedService {
     private static final Logger logger = LoggerFactory.getLogger(HospitalBedService.class);
 
     private final IHospitalBedRepository hospitalBedRepository;
+    private final IEmergencyVisitRepository emergencyVisitRepository;
     private final ModelMapper modelMapper;
 
-    public HospitalBedService(IHospitalBedRepository hospitalBedRepository, ModelMapper modelMapper) {
+    public HospitalBedService(IHospitalBedRepository hospitalBedRepository,
+                              IEmergencyVisitRepository emergencyVisitRepository,
+                              ModelMapper modelMapper) {
         this.hospitalBedRepository = hospitalBedRepository;
+        this.emergencyVisitRepository = emergencyVisitRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -70,6 +76,23 @@ public class HospitalBedService {
         HospitalBed savedHospitalBed = hospitalBedRepository.save(hospitalBed);
         return convertToDetailedDto(savedHospitalBed);
     }
+
+    public DetailHospitalBedDto assignPatientToHospitalBed(Long patientId, Long hospitalBedId) {
+        HospitalBed hospitalBed = hospitalBedRepository.findById(hospitalBedId).orElseThrow(() -> {
+            logger.error("Hospital Bed with id: {} not found", hospitalBedId);
+            return new IllegalArgumentException("Hospital Bed with id: " + hospitalBedId + " not found");
+        });
+        // find emergency visit by patient id
+        EmergencyVisit emergencyVisit = emergencyVisitRepository.findByPatientId(patientId);
+        if (emergencyVisit == null) {
+            logger.error("Emergency Visit with patient id: {} not found", patientId);
+            throw new IllegalArgumentException("Emergency Visit with patient id: " + patientId + " not found");
+        }
+        hospitalBed.setEmergencyVisit(emergencyVisit);
+        HospitalBed savedHospitalBed = hospitalBedRepository.save(hospitalBed);
+        return convertToDetailedDto(savedHospitalBed);
+    }
+
 
     public void deleteHospitalBed(Long id) {
         boolean existsById = hospitalBedRepository.existsById(id);

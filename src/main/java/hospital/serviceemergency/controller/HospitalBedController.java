@@ -94,6 +94,13 @@ public class HospitalBedController {
         return ResponseEntity.ok(this.hospitalBedService.updateHospitalBed(hospitalBedDto, id));
     }
 
+    // Assign patient to hospital bed
+    @PutMapping(produces = "application/json", value = "/assign-patient/{patientId}/hospital-bed/{hospitalBedId}")
+    public ResponseEntity<DetailHospitalBedDto> assignPatientToHospitalBed(@PathVariable Long patientId,
+                                                                           @PathVariable Long hospitalBedId) {
+        return ResponseEntity.ok(this.hospitalBedService.assignPatientToHospitalBed(patientId, hospitalBedId));
+    }
+
     /**
      * Delete hospital bed
      * @param id
