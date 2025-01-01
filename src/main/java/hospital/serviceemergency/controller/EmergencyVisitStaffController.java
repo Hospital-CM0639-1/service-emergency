@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
-@RequestMapping("/emergency-visit-staff")
+@RequestMapping("${vAPI}/emergency-visit-staff")
 public class EmergencyVisitStaffController {
     private final EmergencyVisitStaffService emergencyVisitStaffService;
 
