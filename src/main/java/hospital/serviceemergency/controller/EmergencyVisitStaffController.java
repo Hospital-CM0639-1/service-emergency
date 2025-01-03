@@ -1,6 +1,7 @@
 package hospital.serviceemergency.controller;
 
 import hospital.serviceemergency.model.dto.emergencyvisitstaff.EmergencyVisitStaffDto;
+import hospital.serviceemergency.model.enums.EPatientStatus;
 import hospital.serviceemergency.service.EmergencyVisitStaffService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,8 +27,8 @@ public class EmergencyVisitStaffController {
      * @return Page of emergency visit staff
      */
     @GetMapping(produces = "application/json")
-    public ResponseEntity<Page<EmergencyVisitStaffDto>> getAllEmergencyVisitStaff(Pageable pageable) {
-        return ResponseEntity.ok(this.emergencyVisitStaffService.getAllEmergencyVisitStaff(pageable));
+    public ResponseEntity<Page<EmergencyVisitStaffDto>> getAllEmergencyVisitStaff(Pageable pageable, @RequestParam(required = false) EPatientStatus currentStatus) {
+        return ResponseEntity.ok(this.emergencyVisitStaffService.getAllEmergencyVisitStaff(pageable, currentStatus));
     }
 
     /**
