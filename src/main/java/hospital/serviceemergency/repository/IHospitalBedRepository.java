@@ -2,6 +2,7 @@ package hospital.serviceemergency.repository;
 
 import hospital.serviceemergency.model.HospitalBed;
 import hospital.serviceemergency.model.enums.ECurrentBedStatus;
+import hospital.serviceemergency.model.enums.EWardSection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -21,7 +22,9 @@ public interface IHospitalBedRepository extends JpaRepository<HospitalBed, Long>
 
     Optional<HospitalBed> findByEmergencyVisit_Patient_IdAndEmergencyVisitIsNotNull(Long patientId);
 
+    Optional<HospitalBed> findByEmergencyVisit_Id(Long visitId);
+
     Optional<HospitalBed> findByBedNumber(String bedNumber);
 
-    List<HospitalBed> findByCurrentStatusAndWardSection(ECurrentBedStatus currentStatus, String wardSection);
+    List<HospitalBed> findByCurrentStatusAndWardSection(ECurrentBedStatus currentStatus, EWardSection wardSection);
 }

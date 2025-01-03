@@ -2,7 +2,9 @@ package hospital.serviceemergency.controller;
 
 import hospital.serviceemergency.model.dto.hospitalbed.DetailHospitalBedDto;
 import hospital.serviceemergency.model.dto.hospitalbed.HospitalBedDto;
+import hospital.serviceemergency.model.dto.hospitalbed.PatientBedAssignmentDto;
 import hospital.serviceemergency.model.enums.ECurrentBedStatus;
+import hospital.serviceemergency.model.enums.EWardSection;
 import hospital.serviceemergency.service.HospitalBedService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -36,7 +38,7 @@ public class HospitalBedController {
      * @return HospitalBedDto
      */
     @GetMapping(produces = "application/json", value = "/{hospitalBedId}")
-    public ResponseEntity<HospitalBedDto> getHospitalBedById(@PathVariable Long hospitalBedId) {
+    public ResponseEntity<DetailHospitalBedDto> getHospitalBedById(@PathVariable Long hospitalBedId) {
         return ResponseEntity.ok(this.hospitalBedService.getHospitalBedById(hospitalBedId));
     }
 
@@ -68,7 +70,7 @@ public class HospitalBedController {
      */
     @GetMapping(produces = "application/json", value = "/status/{currentStatus}/ward-section/{wardSection}")
     public ResponseEntity<List<HospitalBedDto>> getHospitalBedsByCurrentStatusAndWardSection(@PathVariable ECurrentBedStatus currentStatus,
-                                                                                             @PathVariable String wardSection) {
+                                                                                             @PathVariable EWardSection wardSection) {
         return ResponseEntity.ok(this.hospitalBedService.getHospitalBedsByCurrentStatusAndWardSection(currentStatus, wardSection));
     }
 
@@ -95,10 +97,25 @@ public class HospitalBedController {
     }
 
     // Assign patient to hospital bed
-    @PutMapping(produces = "application/json", value = "/assign-patient/{patientId}/hospital-bed/{hospitalBedId}")
+    @PutMapping(produces = "application/json", value = "/assign-patient/{patientId}/hospital-bed/{hospitalBedId}/status/{currentStatus}")
     public ResponseEntity<DetailHospitalBedDto> assignPatientToHospitalBed(@PathVariable Long patientId,
-                                                                           @PathVariable Long hospitalBedId) {
-        return ResponseEntity.ok(this.hospitalBedService.assignPatientToHospitalBed(patientId, hospitalBedId));
+                                                                           @PathVariable Long hospitalBedId,
+                                                                           @PathVariable ECurrentBedStatus currentStatus) {
+        return ResponseEntity.ok(this.hospitalBedService.assignPatientToHospitalBed(patientId, hospitalBedId, currentStatus));
+    }
+
+    // Free hospital bed by patient id
+    @PutMapping(produces = "application/json", value = "/free-bed/patient/{patientId}")
+    public ResponseEntity<DetailHospitalBedDto> freeHospitalBedByPatientId(@PathVariable Long patientId) {
+        return ResponseEntity.ok(this.hospitalBedService.freeBedByPatientId(patientId));
+    }
+
+
+
+    // find patient needing bed
+    @GetMapping(produces = "application/json", value = "/patients-needing-beds")
+    public ResponseEntity<List<PatientBedAssignmentDto>> findPatientsNeedingBeds() {
+        return ResponseEntity.ok(this.hospitalBedService.getPatientsNeedingBeds());
     }
 
     /**
