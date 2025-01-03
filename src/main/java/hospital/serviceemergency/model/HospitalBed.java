@@ -1,13 +1,12 @@
 package hospital.serviceemergency.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import hospital.serviceemergency.model.enums.ECurrentBedStatus;
+import hospital.serviceemergency.model.enums.EWardSection;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.JdbcType;
 import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -25,17 +24,15 @@ public class HospitalBed {
     @Column(name = "bed_number", nullable = false)
     private String bedNumber;
 
+    @Enumerated(EnumType.STRING)
+    @JdbcType(PostgreSQLEnumJdbcType.class)
     @Column(name = "ward_section", nullable = false)
-    private String wardSection;
+    private EWardSection wardSection;
 
     @Enumerated(EnumType.STRING)
     @JdbcType(PostgreSQLEnumJdbcType.class)
     @Column(name = "current_status", nullable = false)
     private ECurrentBedStatus currentStatus;
-
-    @Column(name = "last_cleaned_timestamp")
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime lastCleanedTimestamp;
 
     @ManyToOne
     @JoinColumn(name = "current_visit_id")

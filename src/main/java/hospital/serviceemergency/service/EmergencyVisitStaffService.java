@@ -2,6 +2,7 @@ package hospital.serviceemergency.service;
 
 import hospital.serviceemergency.model.EmergencyVisitStaff;
 import hospital.serviceemergency.model.dto.emergencyvisitstaff.EmergencyVisitStaffDto;
+import hospital.serviceemergency.model.enums.EPatientStatus;
 import hospital.serviceemergency.repository.IEmergencyVisitStaffRepository;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -28,8 +29,12 @@ public class EmergencyVisitStaffService {
         this.modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
     }
 
-    // Get all pageable emergency visit staff
-    public Page<EmergencyVisitStaffDto> getAllEmergencyVisitStaff(Pageable pageable) {
+    // Get all pageable emergency visit staff by patient status
+    public Page<EmergencyVisitStaffDto> getAllEmergencyVisitStaff(Pageable pageable, EPatientStatus currentStatus) {
+        if (currentStatus != null) {
+            return emergencyVisitStaffRepository.findAllByEmergencyVisit_PatientStatus(currentStatus, pageable)
+                    .map(this::convertToDto);
+        }
         return emergencyVisitStaffRepository.findAll(pageable)
                 .map(this::convertToDto);
     }
