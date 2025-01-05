@@ -17,5 +17,5 @@ services:
 
 networks:
   net_storage:
-    name: database_net_storage
+    name: net_storage
     external: true

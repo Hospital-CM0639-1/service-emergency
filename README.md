@@ -34,6 +34,10 @@ HOSPITAL BED
   `GET /api/v1/hospital-beds/bed-number/{bedNumber}`
 - Get bed by ward and current status<br/>
   `GET /api/v1/status/{currentStatus}/ward-section/{wardSection}`
+- Free hospital bed by patient id
+    `PUT /api/v1/hospital-beds/free-bed/patient/{patientId}`
+- Find patient needing bed
+    `GET /api/v1/hospital-beds//patients-needing-beds`
 - Save a new bed and assign<br/>
   `POST /api/v1/hospital-beds`
 <br/>Example:
