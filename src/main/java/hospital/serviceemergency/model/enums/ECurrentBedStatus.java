@@ -2,7 +2,7 @@ package hospital.serviceemergency.model.enums;
 
 public enum ECurrentBedStatus {
     AVAILABLE("available"),
-    UCCUPIED("occupied");
+    OCCUPIED("occupied");
 
     private final String status;
 
