@@ -44,7 +44,7 @@ public class EmergencyVisitController {
         List<EmergencyVisitDto> emergencyPendingVisit = new ArrayList<>();
         for (EmergencyVisitDto emergencyVisitDto : emergencyVisitDtos) {
             PatientInvoce patientInvoce = patientInvoiceRepository.findByEmergencyVisit_Id(emergencyVisitDto.getId());
-            if (patientInvoce != null && !patientInvoce.getPaymentStatus().equals("pending")) {
+            if (patientInvoce != null && patientInvoce.getPaymentStatus().equals("pending")) {
                 emergencyPendingVisit.add(emergencyVisitDto);
             }
         }
