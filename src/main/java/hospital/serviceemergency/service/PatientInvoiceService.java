@@ -1,11 +1,13 @@
 package hospital.serviceemergency.service;
 
 
+import hospital.serviceemergency.model.MedicalProcedure;
 import hospital.serviceemergency.model.PatientInvoce;
 import hospital.serviceemergency.model.PatientVital;
 import hospital.serviceemergency.model.dto.patientinvoice.PatientInvoiceDto;
 import hospital.serviceemergency.model.dto.patientvital.DetailPatientVitalDto;
 import hospital.serviceemergency.model.dto.patientvital.PatientVitalDto;
+import hospital.serviceemergency.repository.IMedicalProcedureRepository;
 import hospital.serviceemergency.repository.IPatientInvoiceRepository;
 import hospital.serviceemergency.repository.IPatientVitalRepository;
 import org.modelmapper.ModelMapper;
@@ -26,11 +28,13 @@ public class PatientInvoiceService {
     private static final Logger logger = LoggerFactory.getLogger(PatientInvoiceService.class);
 
     private final IPatientInvoiceRepository patientInvoiceRepository;
+    private final IMedicalProcedureRepository medicalProcedureRepository;
     private final ModelMapper modelMapper;
 
-    public PatientInvoiceService(IPatientInvoiceRepository patientInvoiceRepository, ModelMapper modelMapper) {
+    public PatientInvoiceService(IPatientInvoiceRepository patientInvoiceRepository, IMedicalProcedureRepository medicalProcedureRepository, ModelMapper modelMapper) {
         this.patientInvoiceRepository = patientInvoiceRepository;
         this.modelMapper = modelMapper;
+        this.medicalProcedureRepository = medicalProcedureRepository;
     }
 
     /**
@@ -57,9 +61,9 @@ public class PatientInvoiceService {
     }
 
     // Get invoice by visit id
-    public List<PatientInvoiceDto> getInvoiceByVisitId(Long visitId) {
-        List<PatientInvoce> patientInvoce = patientInvoiceRepository.findByEmergencyVisit_Id(visitId);
-        return patientInvoce.stream().map(this::convertToDto).collect(Collectors.toList());
+    public PatientInvoiceDto getInvoiceByVisitId(Long visitId) {
+        PatientInvoce patientInvoce = patientInvoiceRepository.findByEmergencyVisit_Id(visitId);
+        return patientInvoce == null ? null : convertToDto(patientInvoce);
     }
 
 
@@ -70,6 +74,12 @@ public class PatientInvoiceService {
         PatientInvoce patientInvoce = convertToDao(patientInvoiceDto);
         PatientInvoce savePatientInvoice  = patientInvoiceRepository.save(patientInvoce);
         return convertToDto(savePatientInvoice);
+    }
+
+    // Get all medical procedure by visit id and sum up the procedure cost to get total amount
+    public Float getTotalAmountByVisitId(Long visitId) {
+        List<MedicalProcedure> medicalProcedures = medicalProcedureRepository.findByEmergencyVisit_Id(visitId);
+        return medicalProcedures.stream().map(MedicalProcedure::getProcedureCost).reduce(0f, Float::sum);
     }
 
     /**
