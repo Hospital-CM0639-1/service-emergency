@@ -2,6 +2,7 @@ package hospital.serviceemergency.repository;
 
 import hospital.serviceemergency.model.EmergencyVisit;
 import hospital.serviceemergency.model.dto.hospitalbed.PatientBedAssignmentDto;
+import hospital.serviceemergency.model.enums.EPatientStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -30,5 +31,7 @@ public interface IEmergencyVisitRepository extends JpaRepository<EmergencyVisit,
             "AND ev.dischargeTimestamp IS NULL")
     Optional<EmergencyVisit> findActiveVisitByPatientId(@Param("patientId") Long patientId);
 
+    // get list of visit with status DISCHARGED
+    List<EmergencyVisit> findByPatientStatus(EPatientStatus patientStatus);
 
 }

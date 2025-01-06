@@ -22,6 +22,15 @@ public class PatientInvoiceDto {
 @Setter
 class EmergencyVisitDto {
     private Long id;
+    private PatientDto patient;
+}
+
+@Getter
+@Setter
+class PatientDto {
+    private Long id;
+    private String firstName;
+    private String lastName;
 }
 
 @Getter

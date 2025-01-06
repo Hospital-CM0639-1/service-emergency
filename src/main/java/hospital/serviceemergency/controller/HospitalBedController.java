@@ -1,5 +1,6 @@
 package hospital.serviceemergency.controller;
 
+import hospital.serviceemergency.model.dto.general.ResponseDto;
 import hospital.serviceemergency.model.dto.hospitalbed.DetailHospitalBedDto;
 import hospital.serviceemergency.model.dto.hospitalbed.HospitalBedDto;
 import hospital.serviceemergency.model.dto.hospitalbed.PatientBedAssignmentDto;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("${vAPI}/hospital-beds")
@@ -40,6 +42,14 @@ public class HospitalBedController {
     @GetMapping(produces = "application/json", value = "/{hospitalBedId}")
     public ResponseEntity<DetailHospitalBedDto> getHospitalBedById(@PathVariable Long hospitalBedId) {
         return ResponseEntity.ok(this.hospitalBedService.getHospitalBedById(hospitalBedId));
+    }
+
+    /**
+     * Get count of hospital beds by available status group by ward section
+     */
+    @GetMapping(produces = "application/json", value = "/count-by-status-ward-section")
+    public ResponseEntity<List<Map<String, Integer>>> countByCurrentStatusAndWardSection() {
+        return ResponseEntity.ok(this.hospitalBedService.countByCurrentStatusAndWardSection());
     }
 
     /**
