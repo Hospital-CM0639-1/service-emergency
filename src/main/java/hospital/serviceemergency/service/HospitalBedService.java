@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class HospitalBedService {
@@ -53,6 +54,11 @@ public class HospitalBedService {
                     logger.error("Hospital Bed with patient id: {} not found", patientId);
                     return new IllegalArgumentException("Hospital Bed with patient id: " + patientId + " not found");
                 });
+    }
+
+    // countByCurrentStatusAndWardSection
+    public List<Map<String, Integer>> countByCurrentStatusAndWardSection() {
+        return hospitalBedRepository.countByCurrentStatusAndWardSection(ECurrentBedStatus.AVAILABLE);
     }
 
     public DetailHospitalBedDto getHospitalBedByBedNumber(String bedNumber) {

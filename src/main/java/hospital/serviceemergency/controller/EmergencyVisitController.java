@@ -1,111 +1,59 @@
 package hospital.serviceemergency.controller;
 
-import hospital.serviceemergency.model.dto.emergencyvisitstaff.EmergencyVisitStaffDto;
+import hospital.serviceemergency.model.EmergencyVisit;
+import hospital.serviceemergency.model.PatientInvoce;
+import hospital.serviceemergency.model.dto.emergencyvisit.EmergencyVisitDto;
 import hospital.serviceemergency.model.enums.EPatientStatus;
-import hospital.serviceemergency.service.EmergencyVisitStaffService;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.format.annotation.DateTimeFormat;
+import hospital.serviceemergency.repository.IEmergencyVisitRepository;
+import hospital.serviceemergency.repository.IPatientInvoiceRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
+
 @RestController
-@RequestMapping("${vAPI}/emergency-visit-staff")
-public class EmergencyVisitStaffController {
-    private final EmergencyVisitStaffService emergencyVisitStaffService;
+@RequestMapping("${vAPI}/emergency-visit")
+public class EmergencyVisitController {
+    private final IEmergencyVisitRepository emergencyVisitRepository;
+    private final IPatientInvoiceRepository patientInvoiceRepository;
+    private final ModelMapper modelMapper;
 
-    public EmergencyVisitStaffController(EmergencyVisitStaffService emergencyVisitStaffService) {
-        this.emergencyVisitStaffService = emergencyVisitStaffService;
+    public EmergencyVisitController(IEmergencyVisitRepository emergencyVisitRepository, IPatientInvoiceRepository patientInvoiceRepository, ModelMapper modelMapper) {
+        this.emergencyVisitRepository = emergencyVisitRepository;
+        this.modelMapper = modelMapper;
+        this.patientInvoiceRepository = patientInvoiceRepository;
     }
 
-    /**
-     * Get all pageable emergency visit staff
-     * @param pageable
-     * @return Page of emergency visit staff
-     */
-    @GetMapping(produces = "application/json")
-    public ResponseEntity<Page<EmergencyVisitStaffDto>> getAllEmergencyVisitStaff(Pageable pageable, @RequestParam(required = false) EPatientStatus currentStatus) {
-        return ResponseEntity.ok(this.emergencyVisitStaffService.getAllEmergencyVisitStaff(pageable, currentStatus));
+    // get by id
+    @GetMapping(produces = "application/json", value = "{id}")
+    public ResponseEntity<EmergencyVisitDto> getAllEmergencyVisitStaff(@PathVariable Long id) {
+        return ResponseEntity.ok(this.emergencyVisitRepository.findById(id).map(this::convertToDto)
+                .orElseThrow(() -> new IllegalArgumentException("Emergency visit with id " + id + " not found")));
     }
 
-    /**
-     * Get all staff assigned to a patient
-     * @param staffId
-     * @return List of patients assigned to a staff
-     */
-    @GetMapping(value = "staff/{staffId}", produces = "application/json")
-    public ResponseEntity<List<EmergencyVisitStaffDto>> getPatientsAssignedToStaff(@PathVariable Long staffId) {
-        return ResponseEntity.ok(this.emergencyVisitStaffService.getPatientsAssignedToStaff(staffId));
+    // get visit with status DISCHARGED
+    @GetMapping(produces = "application/json", value = "/discharged")
+    public ResponseEntity<List<EmergencyVisitDto>> getDischargedEmergencyVisit() {
+        List<EmergencyVisitDto> emergencyVisitDtos = this.emergencyVisitRepository.findByPatientStatus(EPatientStatus.DISCHARGED).stream()
+                .map(this::convertToDto)
+                .toList();
+        // for each emergency visit, check if in patient invoice table the status is pending for his fk otherwise remove from list
+        List<EmergencyVisitDto> emergencyPendingVisit = new ArrayList<>();
+        for (EmergencyVisitDto emergencyVisitDto : emergencyVisitDtos) {
+            PatientInvoce patientInvoce = patientInvoiceRepository.findByEmergencyVisit_Id(emergencyVisitDto.getId());
+            if (patientInvoce != null && !patientInvoce.getPaymentStatus().equals("pending")) {
+                emergencyPendingVisit.add(emergencyVisitDto);
+            }
+        }
+        return ResponseEntity.ok(emergencyPendingVisit);
     }
 
-    /**
-     * Get all staff assigned to a patient
-     * @param patientId
-     * @return List of staff assigned to a patient
-     */
-    @GetMapping(value = "patient/{patientId}", produces = "application/json")
-    public ResponseEntity<List<EmergencyVisitStaffDto>> getStaffAssignedToPatient(@PathVariable Long patientId) {
-        return ResponseEntity.ok(this.emergencyVisitStaffService.getStaffAssignedToPatient(patientId));
+    // convert to dto
+    private EmergencyVisitDto convertToDto(EmergencyVisit emergencyVisit) {
+        return modelMapper.map(emergencyVisit, EmergencyVisitDto.class);
     }
 
-    /**
-     * Get all staff and patients involved in a visit
-     * @param visitId
-     * @return List of staff and patients involved in a visit
-     */
-    @GetMapping(value = "visit/{visitId}", produces = "application/json")
-    public ResponseEntity<List<EmergencyVisitStaffDto>> getPatientAndStaffInvolvedInVisit(@PathVariable Long visitId) {
-        return ResponseEntity.ok(this.emergencyVisitStaffService.getPatientAndStaffInvolvedInVisit(visitId));
-    }
-
-    /**
-     * Get all emergency visits between dates
-     * @param startDate
-     * @param endDate
-     * @return List of emergency visits between dates
-     */
-    @GetMapping(value = "dates", produces = "application/json")
-    public ResponseEntity<List<EmergencyVisitStaffDto>> getEmergencyVisitStaffBetweenDates(
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") LocalDateTime startDate,
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") LocalDateTime endDate) {
-        return ResponseEntity.ok(this.emergencyVisitStaffService.getEmergencyVisitStaffBetweenDates(startDate, endDate));
-    }
-
-    /**
-     * Add emergency visit staff
-     * @param emergencyVisitStaffDto
-     * @return EmergencyVisitStaffDto
-     */
-    @PostMapping(consumes = "application/json", produces = "application/json")
-    public ResponseEntity<EmergencyVisitStaffDto> addEmergencyVisitStaff(@RequestBody EmergencyVisitStaffDto emergencyVisitStaffDto) {
-        return ResponseEntity.ok(this.emergencyVisitStaffService.addEmergencyVisitStaff(emergencyVisitStaffDto));
-    }
-
-    /**
-     * Update emergency visit staff
-     * @param emergencyVisitStaffDto
-     * @param visitId
-     * @param staffId
-     * @return EmergencyVisitStaffDto
-     */
-    @PutMapping(value = "visit/{visitId}/staff/{staffId}", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<EmergencyVisitStaffDto> updateEmergencyVisitStaff(
-            @RequestBody EmergencyVisitStaffDto emergencyVisitStaffDto,
-            @PathVariable Long visitId,
-            @PathVariable Long staffId) {
-        return ResponseEntity.ok(this.emergencyVisitStaffService.updateEmergencyVisitStaff(emergencyVisitStaffDto, visitId, staffId));
-    }
-
-    /**
-     * Delete emergency visit staff
-     * @param visitId
-     * @param staffId
-     */
-    @DeleteMapping(value = "visit/{visitId}/staff/{staffId}")
-    public void deleteEmergencyVisitStaff(@PathVariable Long visitId, @PathVariable Long staffId) {
-        this.emergencyVisitStaffService.deleteEmergencyVisitStaff(visitId, staffId);
-    }
 }
