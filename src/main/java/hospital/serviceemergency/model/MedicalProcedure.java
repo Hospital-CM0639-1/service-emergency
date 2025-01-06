@@ -1,4 +1,4 @@
-package hospital.servicedoctor.model;
+package hospital.serviceemergency.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
