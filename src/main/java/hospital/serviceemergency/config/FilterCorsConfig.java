@@ -8,7 +8,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 /**
  * configure CORS
  */
-@Configuration
+//@Configuration
 public class FilterCorsConfig implements WebMvcConfigurer
 {
 	

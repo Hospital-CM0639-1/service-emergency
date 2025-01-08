@@ -25,19 +25,21 @@ public class PatientInvoce {
     @Column(name = "total_amount", nullable = false)
     private Float totalAmount;
 
-    @Column(name = "payment_status")
-    private String paymentStatus;
-
     @Column(name = "invoice_timestamp")
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime invoiceTimestamp;
 
+    @Column(name = "payment_status")
+    @Enumerated(EnumType.STRING)
+    @JdbcType(PostgreSQLEnumJdbcType.class)
+    private EPaymentStatus paymentStatus;
+
+    @Column(name = "payment_received")
+    private Boolean paymentReceived;
+
     @Column(name = "payment_received_timestamp")
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime paymentReceivedTimestamp;
-
-    @Column(name = "payment_received_amount")
-    private Float paymentReceivedAmount;
 
     // many to one visit_id
     @ManyToOne
