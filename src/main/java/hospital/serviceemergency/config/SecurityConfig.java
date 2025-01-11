@@ -26,7 +26,7 @@ public class SecurityConfig {
                 .and()
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests()
-                .requestMatchers("/api/**").hasAnyRole("ADMN", "NURSE", "SECRETARY")
+                .requestMatchers("/api/**").hasAnyRole("ADMIN", "NURSE", "SECRETARY")
                 .anyRequest().authenticated()
                 .and()
                 .build();
