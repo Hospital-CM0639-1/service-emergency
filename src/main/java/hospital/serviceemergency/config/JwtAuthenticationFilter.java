@@ -16,6 +16,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,11 +38,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             if (token != null && validateToken(token)) {
                 Claims claims = extractClaims(token);
-                List<String> roles = claims.get("roles", List.class);
+                String role = determineRole(claims);
 
-                List<SimpleGrantedAuthority> authorities = roles.stream()
-                        .map(SimpleGrantedAuthority::new)
-                        .collect(Collectors.toList());
+                List<SimpleGrantedAuthority> authorities = Collections.singletonList(
+                        new SimpleGrantedAuthority(role)
+                );
 
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(claims.get("username"), null, authorities);
@@ -55,6 +56,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         } catch (Exception e) {
             throw new ServletException("Internal server error", e);
         }
+    }
+
+    private String determineRole(Claims claims) {
+        String role = claims.get("role", String.class);
+
+        if (role != null) {
+            return "ROLE_" + role;
+        }
+
+        String type = claims.get("type", String.class);
+        List<String> roles = claims.get("roles", List.class);
+
+        if ("patient".equals(type) && roles != null && roles.contains("ROLE_PATIENT")) {
+            return "ROLE_PATIENT";
+        }
+
+        // You might want to add a default role or throw an exception here
+        throw new BadCredentialsException("No valid role found in token");
     }
 
 
