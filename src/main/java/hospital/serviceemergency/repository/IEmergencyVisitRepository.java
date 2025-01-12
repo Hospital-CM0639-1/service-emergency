@@ -14,7 +14,7 @@ import java.util.Optional;
 @Repository
 public interface IEmergencyVisitRepository extends JpaRepository<EmergencyVisit, Long> {
     // find emergency visit by patient id
-    EmergencyVisit findByPatientId(Long patientId);
+    List<EmergencyVisit> findByPatientId(Long patientId);
 
     @Query("SELECT new hospital.serviceemergency.model.dto.hospitalbed.PatientBedAssignmentDto(" +
             "ev.id, p.id, p.firstName, p.lastName, ev.admissionTimestamp, ev.priorityLevel) " +

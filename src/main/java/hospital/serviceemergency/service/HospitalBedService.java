@@ -96,7 +96,11 @@ public class HospitalBedService {
             return new IllegalArgumentException("Hospital Bed with id: " + hospitalBedId + " not found");
         });
         // find emergency visit by patient id
-        EmergencyVisit emergencyVisit = emergencyVisitRepository.findByPatientId(patientId);
+        List<EmergencyVisit> emergencyVisitList = emergencyVisitRepository.findByPatientId(patientId);
+        // get emergency visit with status IN_TREATMENT
+        EmergencyVisit emergencyVisit = emergencyVisitList.stream()
+                .filter(visit -> visit.getPatientStatus() == EPatientStatus.IN_TREATMENT)
+                .findFirst().orElse(null);
         if (emergencyVisit == null) {
             logger.error("Emergency Visit with patient id: {} not found", patientId);
             throw new IllegalArgumentException("Emergency Visit with patient id: " + patientId + " not found");
