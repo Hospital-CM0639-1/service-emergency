@@ -13,6 +13,6 @@ public interface IPatientInvoiceRepository extends JpaRepository<PatientInvoce, 
     List<PatientInvoce> findByEmergencyVisit_Patient_Id(Long patientId);
 
     // Get invoice by visit id
-    List<PatientInvoce> findByEmergencyVisit_Id(Long visitId);
+    PatientInvoce findByEmergencyVisit_Id(Long visitId);
 
 }

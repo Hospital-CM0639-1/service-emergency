@@ -1,6 +1,7 @@
 package hospital.serviceemergency.controller;
 
 
+import hospital.serviceemergency.model.dto.general.ResponseDto;
 import hospital.serviceemergency.model.dto.patientinvoice.PatientInvoiceDto;
 import hospital.serviceemergency.service.PatientInvoiceService;
 import org.springframework.data.domain.Page;
@@ -57,8 +58,18 @@ public class PatientInvoiceController {
      * @return List<PatientInvoiceDto>
      */
     @GetMapping(produces = "application/json", value = "/visit/{visitId}")
-    public ResponseEntity<List<PatientInvoiceDto>> getInvoiceByVisitId(@PathVariable Long visitId) {
+    public ResponseEntity<PatientInvoiceDto> getInvoiceByVisitId(@PathVariable Long visitId) {
         return ResponseEntity.ok(this.patientInvoiceService.getInvoiceByVisitId(visitId));
+    }
+
+    /**
+     * Get total amount by visit id
+     * @param visitId
+     * @return
+     */
+    @GetMapping(produces = "application/json", value = "/total-amount/{visitId}")
+    public ResponseEntity<ResponseDto<Float>> getTotalAmountByVisitId(@PathVariable Long visitId) {
+        return ResponseEntity.ok(new ResponseDto<>(this.patientInvoiceService.getTotalAmountByVisitId(visitId)));
     }
 
     /**
@@ -70,6 +81,8 @@ public class PatientInvoiceController {
     public ResponseEntity<PatientInvoiceDto> addPatientInvoice(@RequestBody PatientInvoiceDto patientInvoiceDto) {
         return ResponseEntity.ok(this.patientInvoiceService.savePatientInvoice(patientInvoiceDto));
     }
+
+
 
     /**
      * Update patient invoice

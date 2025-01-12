@@ -1,5 +1,6 @@
 package hospital.serviceemergency.model.dto.patientinvoice;
 
+import hospital.serviceemergency.model.enums.EPaymentStatus;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,10 +11,10 @@ import java.time.LocalDateTime;
 public class PatientInvoiceDto {
     private Long id;
     private Float totalAmount;
-    private String paymentStatus;
     private LocalDateTime invoiceTimestamp;
+    private EPaymentStatus paymentStatus;
     private LocalDateTime paymentReceivedTimestamp;
-    private Float paymentReceivedAmount;
+    private Boolean paymentReceived;
     private EmergencyVisitDto emergencyVisit;
     private StaffDto createdByStaff;
 }
@@ -22,6 +23,15 @@ public class PatientInvoiceDto {
 @Setter
 class EmergencyVisitDto {
     private Long id;
+    private PatientDto patient;
+}
+
+@Getter
+@Setter
+class PatientDto {
+    private Long id;
+    private String firstName;
+    private String lastName;
 }
 
 @Getter

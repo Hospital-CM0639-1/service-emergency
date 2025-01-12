@@ -2,6 +2,9 @@ package hospital.serviceemergency.repository;
 
 import hospital.serviceemergency.model.EmergencyVisitStaff;
 import hospital.serviceemergency.model.EmergencyVisitStaffId;
+import hospital.serviceemergency.model.enums.EPatientStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -41,6 +44,8 @@ public interface IEmergencyVisitStaffRepository extends JpaRepository<EmergencyV
     List<EmergencyVisitStaff> findEmergencyVisitStaffBetweenDates(@Param("startDate") LocalDateTime startDate,
                                                                   @Param("endDate") LocalDateTime endDate);
 
+    // Find all by current status
+    Page<EmergencyVisitStaff> findAllByEmergencyVisit_PatientStatus(EPatientStatus currentStatus, Pageable pageable);
 
     // Delete by visit id and staff id
     void deleteByVisitIdAndStaffId(Long visitId, Long staffId);

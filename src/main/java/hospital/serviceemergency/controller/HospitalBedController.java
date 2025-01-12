@@ -1,8 +1,11 @@
 package hospital.serviceemergency.controller;
 
+import hospital.serviceemergency.model.dto.general.ResponseDto;
 import hospital.serviceemergency.model.dto.hospitalbed.DetailHospitalBedDto;
 import hospital.serviceemergency.model.dto.hospitalbed.HospitalBedDto;
+import hospital.serviceemergency.model.dto.hospitalbed.PatientBedAssignmentDto;
 import hospital.serviceemergency.model.enums.ECurrentBedStatus;
+import hospital.serviceemergency.model.enums.EWardSection;
 import hospital.serviceemergency.service.HospitalBedService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("${vAPI}/hospital-beds")
@@ -36,8 +40,16 @@ public class HospitalBedController {
      * @return HospitalBedDto
      */
     @GetMapping(produces = "application/json", value = "/{hospitalBedId}")
-    public ResponseEntity<HospitalBedDto> getHospitalBedById(@PathVariable Long hospitalBedId) {
+    public ResponseEntity<DetailHospitalBedDto> getHospitalBedById(@PathVariable Long hospitalBedId) {
         return ResponseEntity.ok(this.hospitalBedService.getHospitalBedById(hospitalBedId));
+    }
+
+    /**
+     * Get count of hospital beds by available status group by ward section
+     */
+    @GetMapping(produces = "application/json", value = "/count-by-status-ward-section")
+    public ResponseEntity<List<Map<String, Integer>>> countByCurrentStatusAndWardSection() {
+        return ResponseEntity.ok(this.hospitalBedService.countByCurrentStatusAndWardSection());
     }
 
     /**
@@ -68,7 +80,7 @@ public class HospitalBedController {
      */
     @GetMapping(produces = "application/json", value = "/status/{currentStatus}/ward-section/{wardSection}")
     public ResponseEntity<List<HospitalBedDto>> getHospitalBedsByCurrentStatusAndWardSection(@PathVariable ECurrentBedStatus currentStatus,
-                                                                                             @PathVariable String wardSection) {
+                                                                                             @PathVariable EWardSection wardSection) {
         return ResponseEntity.ok(this.hospitalBedService.getHospitalBedsByCurrentStatusAndWardSection(currentStatus, wardSection));
     }
 
@@ -92,6 +104,28 @@ public class HospitalBedController {
     public ResponseEntity<DetailHospitalBedDto> updateHospitalBed(@RequestBody DetailHospitalBedDto hospitalBedDto,
                                                             @PathVariable Long id) {
         return ResponseEntity.ok(this.hospitalBedService.updateHospitalBed(hospitalBedDto, id));
+    }
+
+    // Assign patient to hospital bed
+    @PutMapping(produces = "application/json", value = "/assign-patient/{patientId}/hospital-bed/{hospitalBedId}/status/{currentStatus}")
+    public ResponseEntity<DetailHospitalBedDto> assignPatientToHospitalBed(@PathVariable Long patientId,
+                                                                           @PathVariable Long hospitalBedId,
+                                                                           @PathVariable ECurrentBedStatus currentStatus) {
+        return ResponseEntity.ok(this.hospitalBedService.assignPatientToHospitalBed(patientId, hospitalBedId, currentStatus));
+    }
+
+    // Free hospital bed by patient id
+    @PutMapping(produces = "application/json", value = "/free-bed/patient/{patientId}")
+    public ResponseEntity<DetailHospitalBedDto> freeHospitalBedByPatientId(@PathVariable Long patientId) {
+        return ResponseEntity.ok(this.hospitalBedService.freeBedByPatientId(patientId));
+    }
+
+
+
+    // find patient needing bed
+    @GetMapping(produces = "application/json", value = "/patients-needing-beds")
+    public ResponseEntity<List<PatientBedAssignmentDto>> findPatientsNeedingBeds() {
+        return ResponseEntity.ok(this.hospitalBedService.getPatientsNeedingBeds());
     }
 
     /**
